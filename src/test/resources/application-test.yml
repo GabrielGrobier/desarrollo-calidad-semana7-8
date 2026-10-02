@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    # BD efímera: las pruebas no dependen de un MySQL externo.
+    generate-unique-name: true
+    url: jdbc:h2:mem:tienda_s7_${random.uuid};MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+  sql:
+    init:
+      mode: never
+logging:
+  level:
+    org.hibernate.SQL: WARN

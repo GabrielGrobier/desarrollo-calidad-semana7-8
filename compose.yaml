@@ -1,0 +1,39 @@
+services:
+  mysql:
+    build:
+      context: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-RootSoloDemo123!}
+      MYSQL_DATABASE: tienda_abarrotes_lab
+      MYSQL_USER: tienda_app
+      MYSQL_PASSWORD: ${DB_PASSWORD:-SoloDemo123!}
+    ports:
+      # 3307 local evita conflicto con un MySQL ya instalado.
+      - "3307:3306"
+    volumes:
+      - mysql_tienda_s7:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  backend:
+    build: .
+    environment:
+      # hostname del servicio Docker, NO localhost del contenedor.
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: tienda_abarrotes_lab
+      DB_USER: tienda_app
+      DB_PASSWORD: ${DB_PASSWORD:-SoloDemo123!}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:-CLAVE-DOCENTE-SOLO-DEMO-REEMPLAZAR-ANTES-DE-PRODUCCION-2026}
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_tienda_s7:

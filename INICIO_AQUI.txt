@@ -1,0 +1,70 @@
+Enlaces : 
+https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
+
+Comandos para levantar pagina de visualizaciond de cumplimiento 
+start .\target\site\jacoco\index.html
+
+CDY2203 - LABORATORIO DOCENTE SEMANA 7 
+=========================================================
+Dentro de la carpeta src/test/java/cl/duoc/tienda/ejemplos 
+Podemos encontrar casos de ejemplo sencillo para poder entender la estructura de la construccion de TEST 
+
+
+
+Caso: tienda de abarrotes.
+
+REQUISITOS: Java 21, Maven 3.9+, conexion a Internet para descargar dependencias la primera vez.
+Docker es opcional para correr las pruebas; se usa para levantar MySQL + backend real.
+
+1. Abrir PowerShell en la carpeta que contiene pom.xml.
+2. Comprobar:
+   java -version
+   mvn -version
+3. Ejecutar pruebas y reporte de cobertura:
+   Si quiero solo los test 
+   mvn test 
+   si deseo test y cobertura 
+   mvn clean verify
+4. Revisar resultados:
+   target\surefire-reports\
+   target\site\jacoco\index.html
+
+PRUEBA DE INTRODUCCION :
+de esta fornma podemos probar la ejecucion del algun test individual 
+donde con -Dtest=NombreTest 
+   mvn "-Dtest=CalculadoraVentaTest" test
+
+OTRAS PRUEBAS AISLADAS:
+   mvn "-Dtest=ProductoModelTest" test
+   mvn "-Dtest=ProductoServiceTest" test
+   mvn "-Dtest=VentaServiceTest" test
+
+TEST WEB:
+   mvn "-Dtest=ProductoControllerWebTest" test
+
+En este caso se uso H2 para no depender de mysql 
+TESTS DE INTEGRACION (H2 temporal en memoria):
+   mvn "-Dtest=ProductoRepositoryJpaTest" test
+   mvn "-Dtest=SeguridadHttpIntegrationTest" test
+   mvn "-Dtest=LoginHttpPuertoAleatorioTest" test
+
+
+LEVANTAR APLICACION Y MYSQL:
+   Copy-Item .env.example .env
+   docker compose up -d --build
+   docker compose ps
+   Invoke-RestMethod http://localhost:8080/api/salud
+
+La API de laboratorio contiene usuarios sintéticos y secretos de demostración.
+
+
+Estructura:
+  src/main/java/       Backend original de la tienda.
+  src/test/java/       Pruebas comentadas (JUnit, Mockito, MockMvc, HTTP y JPA).
+  docs/07_RECORRIDO_DE_CLASE.md  Secuencia pedagógica para el docente.
+  docs/08_GUIA_DE_EVIDENCIAS.md Evidencias e interpretación de errores.
+  mysql/Dockerfile      Imagen de MySQL con script de inicialización.
+  compose.yaml          MySQL y backend, con healthcheck.
+  README.md             Manual completo.
+
+

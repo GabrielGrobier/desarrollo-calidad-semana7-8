@@ -1,0 +1,20 @@
+server:
+  port: ${SERVER_PORT:8080}
+spring:
+  datasource:
+    # Ejecutando Java desde el host se conecta al puerto publicado por Docker (3307).
+    # Dentro de Compose, DB_HOST=mysql y DB_PORT=3306.
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3307}/${DB_NAME:tienda_abarrotes_lab}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${DB_USER:tienda_app}
+    password: ${DB_PASSWORD:SoloDemo123!}
+  jpa:
+    hibernate:
+      # Solo laboratorio: para proyectos reales utilizar migraciones versionadas (Flyway/Liquibase).
+      ddl-auto: update
+    open-in-view: false
+app:
+  jwt:
+    issuer: tienda-abarrotes-laboratorio
+    expiration-minutes: 30
+    # Clave de ejemplo SOLAMENTE para ejecución local; reemplazar por variable APP_JWT_SECRET.
+    secret: ${APP_JWT_SECRET:CLAVE-DOCENTE-SOLO-DEMO-REEMPLAZAR-ANTES-DE-PRODUCCION-2026}
